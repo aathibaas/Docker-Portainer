@@ -46,12 +46,23 @@ echo "🐳 Installiere Docker Engine (offiziell)..."
 apt update
 apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# 5. Docker-Dienst aktivieren
-echo "✅ Aktiviere und starte Docker Dienst..."
-systemctl enable docker
-systemctl start docker
+# 5. Docker-Min-API-Version setzen (Kompatibilität für Portainer)
+echo "⚙️ Setze DOCKER_MIN_API_VERSION auf 1.24 (für Portainer-Kompatibilität)..."
 
-# 6. Docker-Netzwerk erstellen (Name frei wählbar)
+mkdir -p /etc/systemd/system/docker.service.d
+
+cat <<EOF > /etc/systemd/system/docker.service.d/min-api-version.conf
+[Service]
+Environment=DOCKER_MIN_API_VERSION=1.24
+EOF
+
+# 6. Docker-Dienst aktivieren & mit neuer Env starten
+echo "✅ Aktiviere und starte Docker Dienst mit angepasster Min-API-Version..."
+systemctl daemon-reload
+systemctl enable docker
+systemctl restart docker
+
+# 7. Docker-Netzwerk erstellen (Name frei wählbar)
 echo ""
 echo "🌐 Docker-Netzwerk erstellen"
 read -rp "Name für das Docker-Netzwerk (z.B. internal-net): " DOCKER_NET_NAME
@@ -69,7 +80,7 @@ else
   docker network create --driver bridge "${DOCKER_NET_NAME}"
 fi
 
-# 7. Portainer installieren (aktuelle Community Edition)
+# 8. Portainer installieren (aktuelle Community Edition)
 echo "📦 Installiere Portainer CE im Netzwerk '${DOCKER_NET_NAME}'..."
 
 # Data-Volume für Portainer
