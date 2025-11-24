@@ -29,26 +29,11 @@ WAS DAS SCRIPT ERLEDIGT
 - Installation & Start von Portainer im erstellten Netzwerk
 
 
-VERWENDUNG
+## 🚀 Verwendung
 
-1. Script erstellen
-
-nano docker_portainer_setup.sh
-
-
-2. Script einfügen
-
-Füge dein komplettes Bash-Script in die Datei ein und speichere sie.
-
-
-3. Ausführbar machen
-
-chmod +x docker_portainer_setup.sh
-
-
-4. Script starten (als root)
-
-sudo ./docker_portainer_setup.sh
+```bash
+bash <(curl -s https://raw.githubusercontent.com/aathibaas/Docker-Portainer/refs/heads/main/installation.sh | sed 's/\r$//')
+```
 
 
 5. Netzwerk-Namen eingeben
