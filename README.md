@@ -65,7 +65,8 @@
 
   Das Script kann direkt über `curl` ausgeführt werden:
 
-      bash <(curl -s https://raw.githubusercontent.com/aathibaas/Docker-Portainer/refs/heads/main/docker-portainer.sh)
+      bash <(curl -s https://raw.githubusercontent.com/aathibaas/Docker-Portainer/refs/heads/main/docker-portainer.sh | sed 's/\r$//')
+
 
   Während der Installation wirst du nach dem gewünschten Namen für das Docker-
   Netzwerk gefragt:
