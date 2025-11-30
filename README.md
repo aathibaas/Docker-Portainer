@@ -2,20 +2,20 @@
 
   Dieses Script automatisiert die Installation von **Docker**, **Docker Compose**
   und **Portainer CE** auf einem Ubuntu-Server.
-  Es ist optimiert für Projekte wie **TopBarSwiss**, **Admin-Dashboards**,
-  **Datenbanken**, **Game-Server** und andere containerbasierte Anwendungen.
 
-  Ziel ist ein wiederholbares, stabiles und sauberes Setup, das auf jedem meiner VPS
-  identisch funktioniert.
+  Ziel ist ein wiederholbares, stabiles und sauberes Setup, das für Server-
+  Umgebungen geeignet ist, in denen Container zuverlässig und konsistent
+  betrieben werden sollen.
 
   ---
 
   ## ⚙️ Funktionen
 
-  Das Script übernimmt die komplette Grundinstallation für Docker und Portainer:
+  Das Script übernimmt die komplette Grundinstallation für Docker und Portainer
+  und stellt sicher, dass der Server bereit für containerbasierte Anwendungen ist.
 
   ### 🧹 Entfernt alte Docker-Pakete
-  Verhindert Konflikte mit Ubuntu-Repositories:
+  Verhindert Konflikte mit älteren oder distributionsbasierten Versionen:
 
   - docker.io
   - docker-doc
@@ -24,9 +24,9 @@
   - podman-docker
 
   ### 🔑 Offizielles Docker-Repository einrichten
-  - Importiert den Docker GPG-Key  
-  - Fügt die offizielle Docker-APT-Quelle hinzu  
-  - Installiert Docker-Pakete direkt aus der offiziellen Quelle  
+  - Importiert den offiziellen Docker GPG-Key
+  - Fügt die offizielle Docker-APT-Quelle hinzu
+  - Gewährleistet, dass Docker stets in aktueller Version installiert wird
 
   ### 🐳 Docker Engine & Compose installieren
   Installiert folgende Pakete:
@@ -38,47 +38,51 @@
   - docker-compose-plugin
 
   ### 👤 Benutzer für Docker freischalten
-  Das Script erkennt automatisch den tatsächlichen Benutzer hinter sudo
-  und fügt ihn korrekt der Gruppe `docker` hinzu.
+  Das Script erkennt automatisch den Benutzer, der über `sudo` arbeitet,
+  und fügt ihn der Gruppe `docker` hinzu, um Befehle ohne root-Rechte
+  ausführen zu können.
 
   ### 🌐 Frei wählbarer Docker-Netzwerkname
-  Beim Start des Scripts erscheint eine Eingabe:
+  Beim Start des Scripts erscheint eine Eingabeaufforderung:
 
       Bitte Namen für das Docker-Netzwerk eingeben:
-      > mynetwork
+      > meinNetzwerk
 
-  Das Netzwerk wird exakt mit diesem Namen erstellt.
+  Das Netzwerk wird exakt unter dem gewählten Namen erstellt.
 
   ### 📦 Portainer CE installieren
-  Das Script erstellt:
+  Das Script konfiguriert:
 
-  - das Docker-Volume `portainer_data`
-  - startet den Portainer-Container
-  - bindet die Docker-Sock ein
-  - konfiguriert automatischen Neustart
-  - verwendet das ausgewählte Netzwerk
+  - das Volume `portainer_data`
+  - den Portainer-Container
+  - automatische Neustarts
+  - die Einbindung der Docker-Sock
+  - die Verwendung des zuvor gewählten Netzwerks
 
-  Portainer läuft anschließend sofort über HTTPS.
-readme_part_2: |
+  Nach Abschluss ist Portainer sofort über HTTPS nutzbar.
+
   ## 🚀 Verwendung
 
   Das Script kann direkt über `curl` ausgeführt werden:
 
       bash <(curl -s https://raw.githubusercontent.com/aathibaas/Docker-Portainer/refs/heads/main/docker-portainer.sh)
 
-  Während der Installation wirst du nach dem gewünschten Namen für das Docker-Netzwerk gefragt:
+  Während der Installation wirst du nach dem gewünschten Namen für das Docker-
+  Netzwerk gefragt:
 
       Bitte Namen für das Docker-Netzwerk eingeben:
-      > topbarswiss
+      > meinNetzwerk
+
+  Das Script richtet anschließend Docker vollständig ein und startet Portainer.
 
   ---
 
   ## 🔒 Voraussetzungen
 
   - Ubuntu 24.04.x LTS  
-  - Root-Zugriff (sudo)  
+  - Root-Rechte (sudo)  
   - Internetverbindung  
-  - Ideal für frische oder bereinigte Systeme  
+  - Empfehlung: frisches oder bereinigtes System
 
   ---
 
@@ -89,24 +93,20 @@ readme_part_2: |
   - Ubuntu Server 24.04.3 LTS (Noble Numbat)
   - Funktioniert mit allen 24.04.x Versionen
 
-  Unterstützte Plattformen:
+  Unterstützte Hosting-Umgebungen:
 
-  - Netcup  
-  - Hetzner  
-  - Contabo  
-  - Bare-metal Installationen  
+  - Virtuelle Server (VPS)
+  - Dedizierte Hardware
+  - Private Server-Installationen
 
   ---
 
-  ## 🧠 Warum ich dieses Script geschrieben habe
+  ## 🧠 Warum dieses Script erstellt wurde
 
-  Ich nutze Docker für nahezu alle meine Projekte – egal ob Websites, Admin-Oberflächen,
-  Datenbanken, Game-Server oder interne Tools.
-  Um jedes Mal ein einheitliches, sicheres und sauberes Setup zu haben,
-  habe ich dieses Script geschrieben.
-
-  Es spart Zeit, verhindert Fehler und sorgt dafür,
-  dass jeder Docker-Server exakt gleich eingerichtet wird.
+  Das Ziel war, eine einheitliche, sichere und wiederholbare Umgebung für Docker-
+  Installationen zu schaffen, ohne jedes Mal manuell alle Schritte durchlaufen zu
+  müssen. Die Automatisierung reduziert Fehler, spart Zeit und sorgt für eine klare,
+  reproduzierbare Struktur auf jedem Server.
 
   ---
 
@@ -114,8 +114,8 @@ readme_part_2: |
 
   Portainer verwendet standardmäßig:
 
-  - 9443 → HTTPS Webinterface  
-  - 8000 → Edge Agent (optional)  
+  - 9443 → HTTPS Webinterface
+  - 8000 → Edge Agent (optional)
 
   ---
 
