@@ -1,87 +1,124 @@
-Docker & Portainer Setup – Ubuntu 24.04 LTS
+  # 🐳 Docker & Portainer Setup Script für Ubuntu 24.04.x
 
-Dieses Bash-Script installiert und konfiguriert automatisch:
+  Dieses Script automatisiert die Installation von **Docker**, **Docker Compose**
+  und **Portainer CE** auf einem Ubuntu-Server.
+  Es ist optimiert für Projekte wie **TopBarSwiss**, **Admin-Dashboards**,
+  **Datenbanken**, **Game-Server** und andere containerbasierte Anwendungen.
 
-- Docker Engine (offiziell von Docker)
-- Docker Compose Plugin
-- Ein benutzerdefiniertes Docker-Bridge-Netzwerk
-- Portainer CE (Web-UI für Docker)
-- Setzt DOCKER_MIN_API_VERSION für maximale Kompatibilität
+  Ziel ist ein wiederholbares, stabiles und sauberes Setup, das auf jedem meiner VPS
+  identisch funktioniert.
 
-Getestet mit Ubuntu 24.04.x LTS (Noble Numbat)
+  ---
 
+  ## ⚙️ Funktionen
 
-WAS DAS SCRIPT ERLEDIGT
+  Das Script übernimmt die komplette Grundinstallation für Docker und Portainer:
 
-- Systemupdate + Cleanup
-- Installation aller benötigten Pakete
-- Hinzufügen des offiziellen Docker-Repositories
-- Installation von:
-  docker-ce
-  docker-ce-cli
-  containerd.io
-  docker-buildx-plugin
-  docker-compose-plugin
-- Setzen von:
-  DOCKER_MIN_API_VERSION=1.24
-- Aktivieren & Neustarten von Docker
-- Erstellen eines Docker-Bridge-Netzwerks (Name frei wählbar)
-- Installation & Start von Portainer im erstellten Netzwerk
+  ### 🧹 Entfernt alte Docker-Pakete
+  Verhindert Konflikte mit Ubuntu-Repositories:
 
+  - docker.io
+  - docker-doc
+  - docker-compose
+  - docker-compose-v2
+  - podman-docker
 
-## 🚀 Verwendung
+  ### 🔑 Offizielles Docker-Repository einrichten
+  - Importiert den Docker GPG-Key  
+  - Fügt die offizielle Docker-APT-Quelle hinzu  
+  - Installiert Docker-Pakete direkt aus der offiziellen Quelle  
 
-```bash
-bash <(curl -s https://raw.githubusercontent.com/aathibaas/Docker-Portainer/refs/heads/main/installation.sh | sed 's/\r$//')
-```
+  ### 🐳 Docker Engine & Compose installieren
+  Installiert folgende Pakete:
 
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
 
-5. Netzwerk-Namen eingeben
+  ### 👤 Benutzer für Docker freischalten
+  Das Script erkennt automatisch den tatsächlichen Benutzer hinter sudo
+  und fügt ihn korrekt der Gruppe `docker` hinzu.
 
-Beispiel:
-internal-net
+  ### 🌐 Frei wählbarer Docker-Netzwerkname
+  Beim Start des Scripts erscheint eine Eingabe:
 
-Wenn du nichts eingibst, wird automatisch "internal-net" verwendet.
+      Bitte Namen für das Docker-Netzwerk eingeben:
+      > mynetwork
 
+  Das Netzwerk wird exakt mit diesem Namen erstellt.
 
-NACH DER INSTALLATION
+  ### 📦 Portainer CE installieren
+  Das Script erstellt:
 
-Portainer ist erreichbar unter:
+  - das Docker-Volume `portainer_data`
+  - startet den Portainer-Container
+  - bindet die Docker-Sock ein
+  - konfiguriert automatischen Neustart
+  - verwendet das ausgewählte Netzwerk
 
-https://<DEINE-SERVER-IP>:9443
+  Portainer läuft anschließend sofort über HTTPS.
+readme_part_2: |
+  ## 🚀 Verwendung
 
-Beim ersten Aufruf:
-- Admin-User erstellen
-- Als Environment: Docker Standalone auswählen
-- Docker Socket wird automatisch erkannt
-- Fertig
+  Das Script kann direkt über `curl` ausgeführt werden:
 
+      bash <(curl -s https://raw.githubusercontent.com/aathibaas/docker-portainer-setup/main/install-docker-portainer.sh | sed 's/\r$//')
 
-NÜTZLICHE DOCKER BEFEHLE
+  Während der Installation wirst du nach dem gewünschten Namen für das Docker-Netzwerk gefragt:
 
-Docker Status prüfen
-systemctl status docker
+      Bitte Namen für das Docker-Netzwerk eingeben:
+      > topbarswiss
 
-Container anzeigen
-docker ps -a
+  ---
 
-Netzwerke anzeigen
-docker network ls
+  ## 🔒 Voraussetzungen
 
-Portainer Logs anzeigen
-docker logs -f portainer
+  - Ubuntu 24.04.x LTS  
+  - Root-Zugriff (sudo)  
+  - Internetverbindung  
+  - Ideal für frische oder bereinigte Systeme  
 
+  ---
 
-WICHTIGE HINWEISE
+  ## 📌 Kompatibilität
 
-- Port 9443 muss erreichbar sein (UFW/Firewall prüfen)
-- Script immer mit sudo / root ausführen
-- Für produktive Umgebungen empfohlen:
-  - UFW konfigurieren
-  - Fail2Ban
-  - Reverse Proxy oder Cloudflare Tunnel
-  - Regelmäßige Backups des portainer_data Volumes
+  Getestet mit:
 
+  - Ubuntu Server 24.04.3 LTS (Noble Numbat)
+  - Funktioniert mit allen 24.04.x Versionen
 
-Autor: Aathithjan Baasgaran
-Optimiert für schnelle, saubere Docker-Setups auf Ubuntu 24.04
+  Unterstützte Plattformen:
+
+  - Netcup  
+  - Hetzner  
+  - Contabo  
+  - Bare-metal Installationen  
+
+  ---
+
+  ## 🧠 Warum ich dieses Script geschrieben habe
+
+  Ich nutze Docker für nahezu alle meine Projekte – egal ob Websites, Admin-Oberflächen,
+  Datenbanken, Game-Server oder interne Tools.
+  Um jedes Mal ein einheitliches, sicheres und sauberes Setup zu haben,
+  habe ich dieses Script geschrieben.
+
+  Es spart Zeit, verhindert Fehler und sorgt dafür,
+  dass jeder Docker-Server exakt gleich eingerichtet wird.
+
+  ---
+
+  ## 🔌 Ports
+
+  Portainer verwendet standardmäßig:
+
+  - 9443 → HTTPS Webinterface  
+  - 8000 → Edge Agent (optional)  
+
+  ---
+
+  ## 🧑‍💻 Autor
+
+  **Aathithjan Baasgaran**
